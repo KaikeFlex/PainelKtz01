@@ -218,11 +218,11 @@ async function handleUserSearch(req, res) {
 
 async function handleLocalUser(req, res) {
   const requestUrl = new URL(req.url, `http://${req.headers.host}`);
-  const userKey = requestUrl.searchParams.get('userKey'); // Adicionado
+  const userKey = requestUrl.searchParams.get('userKey');
   const customNick = requestUrl.searchParams.get('customNick');
   const customRobux = requestUrl.searchParams.get('customRobux');
   
-  // --- ADICIONADO: Lógica de Checagem ---
+  // --- Lógica de Checagem Corrigida ---
   if (userKey && customNick) {
     if (SESSAO_KEYS.has(userKey) && SESSAO_KEYS.get(userKey) !== customNick) {
       return sendJson(res, 401, { error: 'Desconectado' });
@@ -236,13 +236,21 @@ async function handleLocalUser(req, res) {
   const activeBalance = customRobux && !isNaN(customRobux) ? Math.floor(Number(customRobux)) : settings.initialBalance;
   const warnings = [];
   let users = [];
-  try { users = await lookupExactUsername(activeUsername); } catch (e) { warnings.push('exact:failed'); }
+  
+  try { 
+      users = await lookupExactUsername(activeUsername); 
+  } catch (e) { 
+      warnings.push('exact:failed'); 
+  }
+  
   const user = users.find(item => item.name && item.name.toLowerCase() === activeUsername.toLowerCase()) || users[0];
   let avatarUrl = '';
+  
   if (user && user.id) {
     const headshots = await getHeadshots([Number(user.id)]).catch(() => new Map());
     avatarUrl = headshots.get(Number(user.id)) || '';
   }
+  
   sendJson(res, 200, {
     username: user?.name || activeUsername,
     displayName: user?.displayName || user?.name || activeUsername,
