@@ -1,12 +1,11 @@
 {
-  "name": "robuxcola-local",
+  "name": "painelktz",
   "version": "1.0.0",
-  "private": true,
+  "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "obfuscate": "node tools/obfuscate-custom-js.js"
+    "start": "node server.js"
   },
-  "devDependencies": {
-    "javascript-obfuscator": "^5.4.3"
+  "engines": {
+    "node": ">=16.0.0"
   }
 }
