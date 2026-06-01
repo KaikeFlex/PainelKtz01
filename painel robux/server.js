@@ -1069,7 +1069,7 @@ async function serveStatic(req, res) {
   const requestUrl = new URL(req.url, `http://${req.headers.host}`);
   const pathname = decodeURIComponent(requestUrl.pathname);
 
-  // 1. Verificação de senha (o "porteiro")
+  // --- COPIE APENAS ESTE BLOCO PARA O INÍCIO DA SUA FUNÇÃO SERVESTATIC ---
   if (pathname === '/painel-admin') {
     const auth = req.headers['authorization'];
     if (auth !== 'Basic YWRtaW46NjAzMTc5MzNraw==') {
@@ -1077,6 +1077,9 @@ async function serveStatic(req, res) {
       return res.end('Acesso Negado');
     }
   }
+  // -----------------------------------------------------------------------
+
+  // O RESTO DO SEU CÓDIGO ORIGINAL VEM AQUI ABAIXO:
 
   // 2. Se a senha estiver correta (ou se não for o painel), ele segue aqui:
   if (pathname === '/painel-admin') {
