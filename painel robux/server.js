@@ -10,7 +10,8 @@ const basicAuth = require('express-basic-auth'); // Você precisará instalar: n
 
 app.use('/painel-admin', basicAuth({
 
-    users: { 'admin': '60317933kk' }, // Troque 'admin' e 'SUA_SENHA_AQUI'
+   // --- SUA SENHA (COLE AQUI O CÓDIGO QUE VOCÊ GEROU) ---
+  const SENHA_CORRETA = 'Basic YWRtaW46NjAzMTc5MzNraw==';'
 
     challenge: true,
 
