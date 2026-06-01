@@ -1,16 +1,4 @@
-const express = require('express');
-
-const app = express();
-
-const basicAuth = require('express-basic-auth'); // Você precisará instalar: npm install express-basic-auth
-
-
-
-// Defina a senha aqui ou leia de um arquivo .env (mais seguro)
-
-app.use('/painel-admin', basicAuth({
-
-   // --- SUA SENHA (COLE AQUI O CÓDIGO QUE VOCÊ GEROU) ---
+// --- SUA SENHA (COLE AQUI O CÓDIGO QUE VOCÊ GEROU) ---
   const SENHA_CORRETA = 'Basic YWRtaW46NjAzMTc5MzNraw==';'
 
     challenge: true,
@@ -1078,8 +1066,34 @@ async function handleLocalUser(req, res) {
 
 
 async function serveStatic(req, res) {
+  const requestUrl = new URL(req.url, `http://${req.headers.host}`);
+  const pathname = decodeURIComponent(requestUrl.pathname);
 
+  // 1. Verificação de senha (o "porteiro")
+  if (pathname === '/painel-admin') {
+    const auth = req.headers['authorization'];
+    if (auth !== 'Basic YWRtaW46NjAzMTc5MzNraw==') {
+      res.writeHead(401, { 'WWW-Authenticate': 'Basic realm="Acesso Restrito"' });
+      return res.end('Acesso Negado');
+    }
+  }
 
+  // 2. Se a senha estiver correta (ou se não for o painel), ele segue aqui:
+  if (pathname === '/painel-admin') {
+    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+    res.end(`
+      <!DOCTYPE html>
+      <html>
+      ... (seu HTML original aqui) ...
+      </html>
+    `);
+    return; // Importante ter esse return aqui!
+  }
+
+  // 3. Restante do seu código (arquivos estáticos, etc)
+  const fileName = pathname === '/' || pathname === '/pt/robuxcomprar.html' ? 'robuxcomprar.html' : pathname.replace(/^\/+/, '');
+  // ... resto do seu código ...
+}
 
   const requestUrl = new URL(req.url, `http://${req.headers.host}`);
 
